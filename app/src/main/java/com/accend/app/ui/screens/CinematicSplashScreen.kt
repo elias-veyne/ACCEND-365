@@ -213,14 +213,14 @@ fun CinematicSplashScreen(
                 // Gold gradient layer revealed bottom-up
                 Box(
                     modifier = Modifier
-                        .drawWithContent { contentScope ->
+                        .drawWithContent {
                             clipRect(
                                 left = 0f,
                                 top = size.height * (1f - goldReveal),
                                 right = size.width,
                                 bottom = size.height,
                             ) {
-                                contentScope.drawContent()
+                                this@drawWithContent.drawContent()
                             }
                         },
                 ) {
