@@ -2,11 +2,13 @@ package com.accend.app.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -62,6 +65,7 @@ import com.accend.app.ui.theme.SuccessGreen
 import com.accend.app.ui.theme.TextMuted
 import com.accend.app.ui.theme.TextPrimary
 import com.accend.app.ui.theme.TextSecondary
+import com.accend.app.ui.components.bouncyClickable
 
 @Composable
 fun PillarTaskScreen(
@@ -97,7 +101,7 @@ fun PillarTaskScreen(
                     .clip(CircleShape)
                     .background(ObsidianCard)
                     .border(1.dp, GoldHairline, CircleShape)
-                    .clickable { onBack() }
+                    .bouncyClickable { onBack() }
                     .testTag("pillar_back_button"),
                 contentAlignment = Alignment.Center
             ) {
@@ -250,6 +254,15 @@ private fun TaskItemCard(
         label = "check_color"
     )
 
+    val checkPop by animateFloatAsState(
+        targetValue = if (task.isCompleted) 1f else 0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "check_pop_spring"
+    )
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -272,6 +285,9 @@ private fun TaskItemCard(
                 // Interactive Checkbox with instant tactile feedback
                 Box(
                     modifier = Modifier
+                        .bouncyClickable(pressedScale = 0.88f) {
+                            onToggle(if (notesText.isNotBlank()) notesText else null)
+                        }
                         .size(32.dp)
                         .clip(CircleShape)
                         .background(checkColor)
@@ -280,7 +296,6 @@ private fun TaskItemCard(
                             if (task.isCompleted) SuccessGreen else GoldHairline,
                             CircleShape
                         )
-                        .clickable { onToggle(if (notesText.isNotBlank()) notesText else null) }
                         .testTag("task_checkbox_${task.id}"),
                     contentAlignment = Alignment.Center
                 ) {
@@ -289,7 +304,12 @@ private fun TaskItemCard(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Done",
                             tint = ObsidianBg,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier
+                                .size(18.dp)
+                                .graphicsLayer {
+                                    scaleX = checkPop
+                                    scaleY = checkPop
+                                }
                         )
                     }
                 }
@@ -377,7 +397,7 @@ private fun TaskItemCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { expandedNotes = !expandedNotes },
+                    .bouncyClickable(pressedScale = 0.98f) { expandedNotes = !expandedNotes },
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {

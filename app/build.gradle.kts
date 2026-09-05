@@ -14,8 +14,8 @@ android {
         applicationId = "com.accend.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.1.0"
+        versionCode = 5
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
@@ -78,6 +78,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.work:work-runtime-ktx:2.9.1")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.okhttp)
     ksp("androidx.room:room-compiler:2.6.1")
 
     testImplementation("junit:junit:4.13.2")

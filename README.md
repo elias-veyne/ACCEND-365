@@ -1,22 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# ACCEND-365
 
-# Run and deploy your AI Studio app
+A 365-day sovereign self-mastery protocol app: Physical, Mental, Skills and Social pillars, one day at a time.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/63183d73-0501-45a6-83dc-9fdf2455c1da
+- **Cinematic golden splash** on launch (floating gold particles, ACCEND reveal, progress line)
+- **365-day protocol** with per-pillar daily tasks, EXP, levels and unlockable titles
+- **Home dashboard** — daily tasks, progression ring, daily quote, four pillar cards
+- **Analysis** — heatmap + completion stats
+- **Leaderboard** — live cloud cohort standings (All-Time / Friends filter), no fake bots
+- **Cloud sync** — real user profiles, XP and task completions sync to the ACCEND Cloud, restorable on a fresh install
+- **On-device reminders** and pause controls
 
-## Run Locally
+## Stack
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+- Kotlin + Jetpack Compose (Material 3), Room for offline-first local DB
+- Cloud transport: CrudCrud free REST API (no account needed; HTTPS + CORS)
+- Signed release APK built via GitHub Actions
 
+## Build
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
-7. If you have already published your app in AI Studio, please [request upload key reset](https://support.google.com/googleplay/android-developer/answer/9842756#zippy=%2Crequest-an-upload-key-reset) in Google Play Console.
+Local build requires Android SDK 35 + JDK 17:
+
+```bash
+./gradlew assembleRelease
+```
+
+Release builds are also produced automatically on GitHub Actions (workflow `release.yml`) with the signing keystore injected from repo secrets.
+
+## Releases
+
+Signed APKs are published as GitHub Releases: https://github.com/elias-veyne/ACCEND-365/releases

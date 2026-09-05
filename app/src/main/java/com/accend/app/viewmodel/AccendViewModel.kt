@@ -250,7 +250,7 @@ class AccendViewModel(
     fun syncToCloud() {
         viewModelScope.launch {
             _isSyncingCloud.value = true
-            _syncMessage.value = "Synchronizing with Firestore..."
+            _syncMessage.value = "Synchronizing with ACCEND Cloud..."
             val success = repository.tryCloudSync()
             if (success) {
                 val realUsers = repository.fetchCloudLeaderboard(userProfile.value.userId)

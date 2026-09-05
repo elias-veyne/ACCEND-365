@@ -632,7 +632,7 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // Firebase Auth & Firestore Sync Section
+        // Account & Cloud Sync Section
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -650,7 +650,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "FIREBASE AUTH & FIRESTORE SYNC",
+                        text = "ACCOUNT & CLOUD SYNC",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.sp,
@@ -668,7 +668,7 @@ fun SettingsScreen(
                 )
 
                 Text(
-                    text = "Local Room offline database synchronized with Firestore cloud collections.",
+                    text = "Local database synced with the ACCEND Cloud — real user data, live across devices.",
                     fontSize = 12.sp,
                     color = TextSecondary,
                     lineHeight = 16.sp
@@ -706,7 +706,7 @@ fun SettingsScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = if (isSyncing) "SYNCHRONIZING..." else "MANUAL FIRESTORE SYNC",
+                            text = if (isSyncing) "SYNCHRONIZING..." else "MANUAL CLOUD SYNC",
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
                             letterSpacing = 1.sp

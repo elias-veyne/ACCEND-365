@@ -43,6 +43,7 @@ import com.accend.app.model.Quote
 import com.accend.app.model.TaskItem
 import com.accend.app.model.UserProfile
 import com.accend.app.ui.components.AccendAvatar
+import com.accend.app.ui.components.bouncyClickable
 import com.accend.app.ui.components.DailyQuoteCard
 import com.accend.app.ui.components.PillarCard
 import com.accend.app.ui.components.ProgressionCard
@@ -166,7 +167,8 @@ fun HomeScreen(
                         .clip(CircleShape)
                         .background(ObsidianCard)
                         .border(1.dp, GoldHairline, CircleShape)
-                        .clickable { onSyncClick() },
+                        .bouncyClickable { onSyncClick() }
+                        .testTag("home_sync_button"),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(

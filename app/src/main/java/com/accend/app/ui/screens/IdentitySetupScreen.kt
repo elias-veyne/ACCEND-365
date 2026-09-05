@@ -472,7 +472,7 @@ fun IdentitySetupScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Secured with Firebase Auth & Cloud Firestore",
+                text = "Backed by the ACCEND Cloud — your data syncs across devices",
                 fontSize = 11.sp,
                 color = TextMuted
             )

@@ -2,7 +2,6 @@ package com.accend.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -89,7 +88,7 @@ fun AccendAvatar(
             .clip(CircleShape)
             .background(avatarBg)
             .then(
-                if (onClick != null) Modifier.clickable { onClick() } else Modifier
+                if (onClick != null) Modifier.bouncyClickable { onClick() } else Modifier
             )
             .testTag("accend_avatar"),
         contentAlignment = Alignment.Center

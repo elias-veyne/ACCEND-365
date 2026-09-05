@@ -169,12 +169,14 @@ private fun AccendAppContent(
                                 (slideInHorizontally(
                                     initialOffsetX = initialOffset,
                                     animationSpec = tween(340, easing = FastOutSlowInEasing)
-                                ) + fadeIn(animationSpec = tween(340, easing = FastOutSlowInEasing))
+                                ) + fadeIn(animationSpec = tween(340, easing = FastOutSlowInEasing)) +
+                                 scaleIn(initialScale = 0.97f, animationSpec = tween(340, easing = FastOutSlowInEasing))
                                 ).togetherWith(
                                     slideOutHorizontally(
                                         targetOffsetX = targetOffset,
                                         animationSpec = tween(280, easing = FastOutSlowInEasing)
-                                    ) + fadeOut(animationSpec = tween(220, easing = FastOutSlowInEasing))
+                                    ) + fadeOut(animationSpec = tween(240, easing = FastOutSlowInEasing)) +
+                                    scaleOut(targetScale = 0.97f, animationSpec = tween(240, easing = FastOutSlowInEasing))
                                 )
                             },
                             label = "tab_smooth_slide_transition"

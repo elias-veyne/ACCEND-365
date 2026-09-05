@@ -1,8 +1,12 @@
 package com.accend.app.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,6 +42,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.accend.app.model.LeaderboardUser
 import com.accend.app.ui.components.AccendAvatar
+import com.accend.app.ui.components.bouncyClickable
+import com.accend.app.ui.components.pressScale
 import com.accend.app.ui.theme.AccendSerif
 import com.accend.app.ui.theme.GoldDark
 import com.accend.app.ui.theme.GoldHairline
@@ -123,7 +131,7 @@ fun LeaderboardScreen(
                         .clip(RoundedCornerShape(10.dp))
                         .background(ObsidianCard)
                         .border(1.dp, GoldHairline, RoundedCornerShape(10.dp))
-                        .clickable(enabled = !isSyncing) { onRefresh() }
+                        .bouncyClickable(enabled = !isSyncing) { onRefresh() }
                         .padding(8.dp)
                         .testTag("leaderboard_refresh_button"),
                     contentAlignment = Alignment.Center
@@ -156,7 +164,7 @@ fun LeaderboardScreen(
                             if (friendsOnly) GoldPrimary else GoldHairline,
                             RoundedCornerShape(10.dp)
                         )
-                        .clickable { onToggleFriendsOnly() }
+                        .bouncyClickable { onToggleFriendsOnly() }
                         .padding(horizontal = 10.dp, vertical = 7.dp)
                         .testTag("friends_filter_toggle"),
                     contentAlignment = Alignment.Center
@@ -309,14 +317,18 @@ fun LeaderboardScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    val syncInteractionSource = remember { MutableInteractionSource() }
                     Button(
                         onClick = { onRefresh() },
+                        interactionSource = syncInteractionSource,
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = GoldPrimary,
                             contentColor = Color(0xFF0A0B0E)
                         ),
-                        modifier = Modifier.testTag("sync_cloud_standings_button")
+                        modifier = Modifier
+                            .pressScale(syncInteractionSource)
+                            .testTag("sync_cloud_standings_button")
                     ) {
                         Icon(
                             imageVector = Icons.Default.CloudSync,
@@ -326,7 +338,7 @@ fun LeaderboardScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = if (isSyncing) "SYNCING FIRESTORE..." else "SYNC & REFRESH STANDINGS",
+                            text = if (isSyncing) "SYNCING CLOUD..." else "SYNC & REFRESH STANDINGS",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.8.sp,
@@ -341,22 +353,41 @@ fun LeaderboardScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(topUsers, key = { it.userId }) { user ->
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .border(
-                                1.dp,
-                                if (user.isCurrentUser) GoldPrimary else GoldHairline,
-                                RoundedCornerShape(12.dp)
-                            ),
-                        color = if (user.isCurrentUser) ObsidianSurface else ObsidianCard
+                itemsIndexed(topUsers, key = { _, user -> user.userId }) { index, user ->
+                    AnimatedVisibility(
+                        visible = true,
+                        enter = slideInVertically(
+                            initialOffsetY = { height -> height / 2 },
+                            animationSpec = tween(
+                                durationMillis = 360,
+                                delayMillis = (index.coerceAtMost(10)) * 40,
+                                easing = FastOutSlowInEasing
+                            )
+                        ) + fadeIn(
+                            animationSpec = tween(
+                                durationMillis = 360,
+                                delayMillis = (index.coerceAtMost(10)) * 40,
+                                easing = FastOutSlowInEasing
+                            )
+                        ),
+                        label = "leaderboard_row_enter"
                     ) {
-                        LeaderboardRowContent(
-                            user = user,
-                            isPinned = false
-                        )
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .border(
+                                    1.dp,
+                                    if (user.isCurrentUser) GoldPrimary else GoldHairline,
+                                    RoundedCornerShape(12.dp)
+                                ),
+                            color = if (user.isCurrentUser) ObsidianSurface else ObsidianCard
+                        ) {
+                            LeaderboardRowContent(
+                                user = user,
+                                isPinned = false
+                            )
+                        }
                     }
                 }
             }
