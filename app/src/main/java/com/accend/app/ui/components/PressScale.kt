@@ -21,13 +21,13 @@ import androidx.compose.ui.semantics.Role
  * clickable so the scale tracks the actual press state.
  */
 fun Modifier.bouncyClickable(
-    onClick: () -> Unit,
     pressedScale: Float = 0.96f,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = null,
     enabled: Boolean = true,
     onClickLabel: String? = null,
-    role: Role? = null
+    role: Role? = null,
+    onClick: () -> Unit
 ): Modifier = composed {
     val source = interactionSource ?: remember { MutableInteractionSource() }
     val isPressed by source.collectIsPressedAsState()
@@ -51,7 +51,9 @@ fun Modifier.bouncyClickable(
             enabled = enabled,
             onClickLabel = onClickLabel,
             role = role
-        ) { onClick() }
+        ) {
+            onClick()
+        }
 }
 
 /**
