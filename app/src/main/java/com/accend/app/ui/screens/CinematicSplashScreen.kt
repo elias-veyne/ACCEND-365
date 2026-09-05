@@ -219,7 +219,7 @@ fun CinematicSplashScreen(
                                 right = size.width,
                                 bottom = size.height,
                             ) {
-                                this@drawWithContent.drawContent()
+                                drawContent()
                             }
                         },
                 ) {
