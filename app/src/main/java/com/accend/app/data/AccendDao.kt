@@ -1,39 +1,38 @@
 package com.accend.app.data
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AccendDao {
-    @Query("SELECT * FROM users WHERE id = 'local-user'")
-    fun observeUser(): Flow<UserEntity?>
 
-    @Upsert
-    suspend fun upsertUser(user: UserEntity)
+    @Query("SELECT * FROM user_profile LIMIT 1")
+    fun getUserProfileFlow(): Flow<UserProfileEntity?>
 
-    @Query("SELECT * FROM dayprogressentity WHERE userId = 'local-user' AND dayNumber = :day")
-    fun observeDay(day: Int): Flow<List<DayProgressEntity>>
+    @Query("SELECT * FROM user_profile LIMIT 1")
+    suspend fun getUserProfile(): UserProfileEntity?
 
-    @Upsert
-    suspend fun upsertProgress(progress: DayProgressEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdateProfile(profile: UserProfileEntity)
 
-    @Query("SELECT * FROM dayprogressentity WHERE userId = 'local-user'")
-    fun observeAllProgress(): Flow<List<DayProgressEntity>>
+    @Query("SELECT * FROM task_progress WHERE dayNumber = :dayNumber")
+    fun getProgressForDay(dayNumber: Int): Flow<List<TaskProgressEntity>>
 
-    @Upsert
-    suspend fun upsertWeeklyXp(weeklyXp: WeeklyXpEntity)
+    @Query("SELECT * FROM task_progress WHERE isCompleted = 1")
+    fun getAllCompletedProgressFlow(): Flow<List<TaskProgressEntity>>
 
-    @Query("SELECT * FROM quotes ORDER BY id")
-    fun observeQuotes(): Flow<List<QuoteEntity>>
+    @Query("SELECT * FROM task_progress WHERE isCompleted = 1")
+    suspend fun getAllCompletedProgressSync(): List<TaskProgressEntity>
 
-    @Upsert
-    suspend fun upsertQuotes(quotes: List<QuoteEntity>)
+    @Query("SELECT * FROM task_progress WHERE id = :id LIMIT 1")
+    suspend fun getTaskProgressById(id: String): TaskProgressEntity?
 
-    @Query("SELECT * FROM achievements ORDER BY unlocked DESC, id")
-    fun observeAchievements(): Flow<List<AchievementEntity>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdateProgress(progress: TaskProgressEntity)
 
-    @Upsert
-    suspend fun upsertAchievements(achievements: List<AchievementEntity>)
+    @Query("DELETE FROM task_progress WHERE id = :id")
+    suspend fun deleteProgressById(id: String)
 }

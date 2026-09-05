@@ -1,33 +1,22 @@
-# ACCEND-365
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-ACCEND-365 is an offline-first Android character progression app built with Kotlin, Jetpack Compose, Room, and MVVM. It organizes a 365-day practice around four pillars: Physical, Mental, Skills, and Social.
+# Run and deploy your AI Studio app
 
-## Current foundation
+This contains everything you need to run your app locally.
 
-- Compose navigation for onboarding, home, pillars, analysis, leaderboard, and settings
-- Room-backed local profile and daily progress storage
-- Immediate per-task XP awards
-- Level, title, tier, and weekly task XP progression rules
-- Dark gold visual system and responsive daily task UI
-- Firebase intentionally left behind the repository boundary for a later integration
+View your app in AI Studio: https://ai.studio/apps/63183d73-0501-45a6-83dc-9fdf2455c1da
 
-## Build locally
+## Run Locally
 
-This project targets API 34, requires JDK 17 or newer, and uses the Gradle wrapper. Configure `local.properties` with your Android SDK path, then run:
+**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
 
-```bash
-./gradlew test
-./gradlew assembleDebug
-```
 
-Release signing is intentionally not committed. Add a local keystore and signing configuration before producing a distributable release APK.
-
-## Signed release
-
-For a local release, provide `ACCEND_STORE_FILE`, `ACCEND_STORE_PASSWORD`, `ACCEND_KEY_ALIAS`, and `ACCEND_KEY_PASSWORD` as Gradle properties or environment variables, then run:
-
-```bash
-./gradlew assembleRelease
-```
-
-The manual GitHub Actions workflow in `.github/workflows/release.yml` expects these repository secrets: `ACCEND_KEYSTORE_BASE64`, `ACCEND_STORE_PASSWORD`, `ACCEND_KEY_ALIAS`, and `ACCEND_KEY_PASSWORD`. It publishes the signed APK when dispatched with a version such as `0.2.0`.
+1. Open Android Studio
+2. Select **Open** and choose the directory containing this project
+3. Allow Android Studio to fix any incompatibilities as it imports the project.
+4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
+5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
+6. Run the app on an emulator or physical device
+7. If you have already published your app in AI Studio, please [request upload key reset](https://support.google.com/googleplay/android-developer/answer/9842756#zippy=%2Crequest-an-upload-key-reset) in Google Play Console.

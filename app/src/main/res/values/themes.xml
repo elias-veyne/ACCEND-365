@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.Accend" parent="android:Theme.DeviceDefault.NoActionBar">
+        <item name="android:statusBarColor">#0A0B0E</item>
+        <item name="android:navigationBarColor">#0A0B0E</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

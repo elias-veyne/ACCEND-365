@@ -3,49 +3,41 @@ package com.accend.app.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "users")
-data class UserEntity(
-    @PrimaryKey val id: String = "local-user",
-    val displayName: String = "",
-    val joinDate: Long = System.currentTimeMillis(),
-    val currentDay: Int = 1,
-    val totalXp: Int = 0,
-    val chosenSkillTrack: String = "Coding",
-    val onboardingComplete: Boolean = false
-)
-
-@Entity(primaryKeys = ["userId", "dayNumber", "pillarId", "subTaskId"])
-data class DayProgressEntity(
-    val userId: String,
+@Entity(tableName = "task_progress")
+data class TaskProgressEntity(
+    @PrimaryKey val id: String, // e.g. "task_d42_phys_1"
     val dayNumber: Int,
+    val taskId: String,
     val pillarId: String,
-    val subTaskId: String,
-    val completed: Boolean = false,
-    val completedAt: Long? = null,
-    val notes: String = ""
+    val isCompleted: Boolean,
+    val completedAt: Long?,
+    val notes: String?,
+    val xpAwarded: Int
 )
 
-@Entity(tableName = "quotes")
-data class QuoteEntity(
-    @PrimaryKey val id: Int,
-    val text: String,
-    val author: String,
-    val category: String
-)
-
-@Entity(tableName = "achievements")
-data class AchievementEntity(
-    @PrimaryKey val id: String,
-    val name: String,
-    val description: String,
-    val icon: String,
-    val unlocked: Boolean = false,
-    val unlockedAt: Long? = null
-)
-
-@Entity(tableName = "weekly_xp", primaryKeys = ["userId", "weekNumber"])
-data class WeeklyXpEntity(
-    val userId: String,
-    val weekNumber: Int,
-    val xp: Int = 0
+@Entity(tableName = "user_profile")
+data class UserProfileEntity(
+    @PrimaryKey val userId: String = "local_user",
+    val displayName: String = "Ascendant",
+    val avatarId: String = "avatar_gold_1",
+    val customAvatarUri: String? = null,
+    val chosenSkillTrack: String = "coding",
+    val currentDay: Int = 1,
+    val totalExp: Int = 0,
+    val level: Int = 1,
+    val title: String = "AWAKENED",
+    val onboardingComplete: Boolean = false,
+    val isPaused: Boolean = false,
+    val pauseDaysUsed: Int = 0,
+    val maxPauseDays: Int = 14,
+    val morningReminderEnabled: Boolean = true,
+    val morningReminderTime: String = "07:30 AM",
+    val eveningReminderEnabled: Boolean = true,
+    val eveningReminderTime: String = "08:30 PM",
+    val physicalMuted: Boolean = false,
+    val mentalMuted: Boolean = false,
+    val skillsMuted: Boolean = false,
+    val socialMuted: Boolean = false,
+    val lastSyncedAt: Long? = null,
+    val email: String? = null
 )

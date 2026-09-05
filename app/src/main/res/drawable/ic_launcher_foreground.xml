@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="74dp"
+        android:height="74dp"
+        android:drawable="@drawable/ic_launcher_accend_logo"
+        android:gravity="center" />
+</layer-list>
