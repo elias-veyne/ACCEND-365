@@ -1,4 +1,3 @@
-import com.google.gms.googleservices.GoogleServicesPlugin
 
 plugins {
     id("com.android.application")
