@@ -43,7 +43,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.accend.app.model.LeaderboardUser
@@ -307,14 +306,6 @@ fun LeaderboardScreen(
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
-
-                    Text(
-                        text = "No fake bots. Only real people who sign up and complete their daily trials appear on this leaderboard. Tap below to sync with Firestore and pull other real ascendants in real-time.",
-                        fontSize = 12.sp,
-                        color = TextSecondary,
-                        textAlign = TextAlign.Center,
-                        lineHeight = 17.sp
-                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 

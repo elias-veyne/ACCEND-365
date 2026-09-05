@@ -1,6 +1,7 @@
 package com.accend.app.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -20,12 +21,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.accend.app.model.Pillar
 import com.accend.app.ui.components.AccendBottomBar
 import com.accend.app.ui.components.LevelUpCelebrationDialog
 import com.accend.app.ui.screens.AnalysisScreen
+import com.accend.app.ui.screens.CinematicSplashScreen
 import com.accend.app.ui.screens.HomeScreen
 import com.accend.app.ui.screens.IdentitySetupScreen
 import com.accend.app.ui.screens.LeaderboardScreen
@@ -38,6 +43,29 @@ import com.accend.app.viewmodel.NavigationTab
 
 @Composable
 fun AccendApp(
+    viewModelFactory: AccendViewModelFactory,
+    modifier: Modifier = Modifier
+) {
+    var showSplash by remember { mutableStateOf(true) }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        AccendAppContent(viewModelFactory = viewModelFactory)
+
+        AnimatedVisibility(
+            visible = showSplash,
+            exit = fadeOut(animationSpec = tween(900, easing = FastOutSlowInEasing)) +
+                scaleOut(targetScale = 1.08f, animationSpec = tween(900, easing = FastOutSlowInEasing)),
+            label = "splash_overlay"
+        ) {
+            CinematicSplashScreen(
+                onDismiss = { showSplash = false }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AccendAppContent(
     viewModelFactory: AccendViewModelFactory,
     modifier: Modifier = Modifier
 ) {
