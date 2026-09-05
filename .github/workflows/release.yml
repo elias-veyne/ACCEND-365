@@ -1,0 +1,36 @@
+name: Release APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version, for example 0.2.0
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager "platforms;android-34" "build-tools;34.0.0"
+      - name: Decode signing keystore
+        run: echo "${{ secrets.ACCEND_KEYSTORE_BASE64 }}" | base64 --decode > "$RUNNER_TEMP/accend-release.jks"
+      - name: Build signed release APK
+        env:
+          ACCEND_STORE_FILE: ${{ runner.temp }}/accend-release.jks
+          ACCEND_STORE_PASSWORD: ${{ secrets.ACCEND_STORE_PASSWORD }}
+          ACCEND_KEY_ALIAS: ${{ secrets.ACCEND_KEY_ALIAS }}
+          ACCEND_KEY_PASSWORD: ${{ secrets.ACCEND_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "v${{ inputs.version }}" app/build/outputs/apk/release/app-release.apk --title "ACCEND-365 v${{ inputs.version }}" --generate-notes

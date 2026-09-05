@@ -1,0 +1,1 @@
+# ACCEND-365 keeps release shrinking disabled until the Firebase adapter is added.
