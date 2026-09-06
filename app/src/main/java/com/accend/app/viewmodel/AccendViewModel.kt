@@ -25,90 +25,6 @@ enum class NavigationTab {
     ANALYSIS,
     LEADERBOARD,
     SETTINGS
-
-    // ═══════════════════════════════════════════
-    //  v2.0 — Feature Methods
-    // ═══════════════════════════════════════════
-
-    fun useStreakFreeze() {
-        viewModelScope.launch {
-            val p = userProfile.value
-            if (p.streakFreezeTokens > 0) {
-                repository.saveProfile(p.copy(streakFreezeTokens = p.streakFreezeTokens - 1))
-            }
-        }
-    }
-
-    fun useRestDay() {
-        viewModelScope.launch {
-            val p = userProfile.value
-            if (p.restDaysUsedThisWeek < 1) {
-                repository.saveProfile(p.copy(restDaysUsedThisWeek = p.restDaysUsedThisWeek + 1))
-            }
-        }
-    }
-
-    fun resetWeeklyRestDays() {
-        viewModelScope.launch {
-            val p = userProfile.value
-            repository.saveProfile(p.copy(restDaysUsedThisWeek = 0))
-        }
-    }
-
-    fun saveWeeklyReflection(text: String) {
-        viewModelScope.launch {
-            val p = userProfile.value
-            repository.saveProfile(p.copy(weeklyReflection = text))
-        }
-    }
-
-    fun setDailyGoals(pillarIds: List<String>) {
-        viewModelScope.launch {
-            val p = userProfile.value
-            repository.saveProfile(p.copy(dailyGoalsPillarIds = pillarIds))
-        }
-    }
-
-    fun toggleDarkMode() {
-        viewModelScope.launch {
-            val p = userProfile.value
-            repository.saveProfile(p.copy(isDarkMode = !p.isDarkMode))
-        }
-    }
-
-    fun updatePrivacyLevel(level: String) {
-        viewModelScope.launch {
-            val p = userProfile.value
-            repository.saveProfile(p.copy(privacyLevel = level))
-        }
-    }
-
-    fun clearAppCache(context: android.content.Context) {
-        viewModelScope.launch {
-            try {
-                context.cacheDir.deleteRecursively()
-            } catch (_: Exception) {}
-        }
-    }
-
-    fun getCompletionPercentage(): Float {
-        val p = userProfile.value
-        if (p.totalDaysCompleted <= 0) return 0f
-        return ((p.totalDaysCompleted.toFloat() / p.currentDay.coerceAtLeast(1).toFloat()) * 100f).coerceIn(0f, 100f)
-    }
-
-    fun getPillarCompletionPercentage(pillarId: String): Float {
-        val p = userProfile.value
-        val total = (p.physicalCompleted + p.mentalCompleted + p.skillsCompleted + p.socialCompleted).coerceAtLeast(1)
-        return when (pillarId) {
-            "physical" -> (p.physicalCompleted.toFloat() / total.toFloat() * 100f)
-            "mental" -> (p.mentalCompleted.toFloat() / total.toFloat() * 100f)
-            "skills" -> (p.skillsCompleted.toFloat() / total.toFloat() * 100f)
-            "social" -> (p.socialCompleted.toFloat() / total.toFloat() * 100f)
-            else -> 0f
-        }
-    }
-
 }
 
 enum class LeaderboardFilterTab {
@@ -410,4 +326,88 @@ class AccendViewModel(
             item.copy(rank = index + 1)
         }
     }
+
+    // ════════════════════════════════════
+    //  v2.0 — Feature Methods
+    // ════════════════════════════════════
+
+    fun useStreakFreeze() {
+        viewModelScope.launch {
+            val p = userProfile.value
+            if (p.streakFreezeTokens > 0) {
+                repository.saveProfile(p.copy(streakFreezeTokens = p.streakFreezeTokens - 1))
+            }
+        }
+    }
+
+    fun useRestDay() {
+        viewModelScope.launch {
+            val p = userProfile.value
+            if (p.restDaysUsedThisWeek < 1) {
+                repository.saveProfile(p.copy(restDaysUsedThisWeek = p.restDaysUsedThisWeek + 1))
+            }
+        }
+    }
+
+    fun resetWeeklyRestDays() {
+        viewModelScope.launch {
+            val p = userProfile.value
+            repository.saveProfile(p.copy(restDaysUsedThisWeek = 0))
+        }
+    }
+
+    fun saveWeeklyReflection(text: String) {
+        viewModelScope.launch {
+            val p = userProfile.value
+            repository.saveProfile(p.copy(weeklyReflection = text))
+        }
+    }
+
+    fun setDailyGoals(pillarIds: List<String>) {
+        viewModelScope.launch {
+            val p = userProfile.value
+            repository.saveProfile(p.copy(dailyGoalsPillarIds = pillarIds))
+        }
+    }
+
+    fun toggleDarkMode() {
+        viewModelScope.launch {
+            val p = userProfile.value
+            repository.saveProfile(p.copy(isDarkMode = !p.isDarkMode))
+        }
+    }
+
+    fun updatePrivacyLevel(level: String) {
+        viewModelScope.launch {
+            val p = userProfile.value
+            repository.saveProfile(p.copy(privacyLevel = level))
+        }
+    }
+
+    fun clearAppCache(context: android.content.Context) {
+        viewModelScope.launch {
+            try {
+                context.cacheDir.deleteRecursively()
+            } catch (_: Exception) {}
+        }
+    }
+
+    fun getCompletionPercentage(): Float {
+        val p = userProfile.value
+        if (p.totalDaysCompleted <= 0) return 0f
+        return ((p.totalDaysCompleted.toFloat() / p.currentDay.coerceAtLeast(1).toFloat()) * 100f).coerceIn(0f, 100f)
+    }
+
+    fun getPillarCompletionPercentage(pillarId: String): Float {
+        val p = userProfile.value
+        val total = (p.physicalCompleted + p.mentalCompleted + p.skillsCompleted + p.socialCompleted).coerceAtLeast(1)
+        return when (pillarId) {
+            "physical" -> (p.physicalCompleted.toFloat() / total.toFloat() * 100f)
+            "mental" -> (p.mentalCompleted.toFloat() / total.toFloat() * 100f)
+            "skills" -> (p.skillsCompleted.toFloat() / total.toFloat() * 100f)
+            "social" -> (p.socialCompleted.toFloat() / total.toFloat() * 100f)
+            else -> 0f
+        }
+    }
+
 }
