@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.accend.app.audio.SoundManager
 import com.accend.app.model.Pillar
+import androidx.compose.ui.platform.LocalContext
 import com.accend.app.ui.components.AccendBottomBar
 import com.accend.app.ui.components.LevelUpCelebrationDialog
 import com.accend.app.ui.screens.AnalysisScreen
@@ -96,6 +97,7 @@ private fun AccendAppContent(
         celebrationEvent?.let { SoundManager.playNotification() }
     }
 
+    val context = LocalContext.current
     val leaderboardUsers = viewModel.getLeaderboard(leaderboardFilterTab, filterFriendsOnly)
 
     // Check if onboarding is complete
@@ -229,6 +231,7 @@ private fun AccendAppContent(
                                         userProfile = userProfile,
                                         isSyncing = isSyncing,
                                         syncMessage = syncMessage,
+                                        completedTaskCount = allCompletedTasks.size,
                                         onUpdateProfile = { name, avatar, skillTrack, customAvatarUri ->
                                             viewModel.updateProfile(name, avatar, skillTrack, customAvatarUri)
                                         },
@@ -237,7 +240,10 @@ private fun AccendAppContent(
                                         onUpdateReminders = { mEnabled, mTime, eEnabled, eTime ->
                                             viewModel.updateReminders(mEnabled, mTime, eEnabled, eTime)
                                         },
-                                        onSyncWithCloud = { viewModel.syncToCloud() }
+                                        onSyncWithCloud = { viewModel.syncToCloud() },
+                                        onUseStreakFreeze = { viewModel.useStreakFreeze() },
+                                        onClearCache = { viewModel.clearAppCache(context) },
+                                        onToggleDarkMode = { viewModel.toggleDarkMode() }
                                     )
                                 }
                             }

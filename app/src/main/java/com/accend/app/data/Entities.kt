@@ -39,5 +39,19 @@ data class UserProfileEntity(
     val skillsMuted: Boolean = false,
     val socialMuted: Boolean = false,
     val lastSyncedAt: Long? = null,
-    val email: String? = null
+    val email: String? = null,
+    // v2.0 — Feature additions
+    val streakFreezeTokens: Int = 3,
+    val restDaysUsedThisWeek: Int = 0,
+    val weeklyReflection: String = "",
+    val dailyGoalsPillarIds: String = "",
+    val isDarkMode: Boolean = true,
+    val privacyLevel: String = "friends_only",
+    val totalDaysCompleted: Int = 0,
+    val totalTasksCompleted: Int = 0,
+    val bestStreak: Int = 0,
+    val physicalCompleted: Int = 0,
+    val mentalCompleted: Int = 0,
+    val skillsCompleted: Int = 0,
+    val socialCompleted: Int = 0
 )

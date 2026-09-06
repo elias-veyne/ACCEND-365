@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/developer_avatar.jpg" alt="ACCEND" width="110" style="border-radius:50%;box-shadow:0 0 20px rgba(212,175,55,0.4)"/>
+<img src="docs/developer_avatar.jpg" alt="ACCEND" width="120" style="border-radius:50%;box-shadow:0 0 30px rgba(212,175,55,0.5)"/>
 
 # **ACCEND-365**
 
@@ -10,10 +10,25 @@
 
 **Transform who you are, one disciplined day at a time.**
 
-ACCEND is not another habit tracker. It is a full character-progression system
-built on four pillars of real life — Physical, Mental, Skills, and Social.
-Every completed task earns real XP, unlocks titles, and advances your rank
-on a live global leaderboard.
+---
+
+</div>
+
+<div align="center">
+
+# **The Idea**
+
+The vision for ACCEND was conceived by
+
+<img src="docs/developer_avatar.jpg" alt="@xoze7.8.9" width="160" style="border-radius:50%;border:3px solid #E5C158;box-shadow:0 0 40px rgba(212,175,55,0.6)"/>
+
+# **[ @xoze7.8.9 ](https://www.instagram.com/xoze7.8.9?stkn=c2I2NnI2NXJjM3Vn)**
+
+### *Creator & Original Idea*
+
+**All credit for the concept goes to him — we only built it.**
+
+---
 
 [![Release](https://github.com/elias-veyne/ACCEND-365/actions/workflows/release.yml/badge.svg)](https://github.com/elias-veyne/ACCEND-365/releases)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -85,23 +100,6 @@ Or grab the latest signed APK from [Releases](https://github.com/elias-veyne/ACC
   <img src="https://img.shields.io/badge/Room-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Room"/>
   <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="Actions"/>
 </p>
-
----
-
-## Acknowledgements
-
-The idea behind ACCEND belongs to the community. Special credit goes to the
-developer whose vision made this project possible:
-
-<div align="center">
-
-<img src="docs/developer_avatar.jpg" alt="Developer" width="80" style="border-radius:50%"/>
-
-**[@xoze7.8.9](https://www.instagram.com/xoze7.8.9?stkn=c2I2NnI2NXJjM3Vn)**
-
-*Concept and original idea*
-
-</div>
 
 ---
 

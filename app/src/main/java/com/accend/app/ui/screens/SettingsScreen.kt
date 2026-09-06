@@ -26,19 +26,27 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudSync
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PauseCircle
-import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayCircle
+import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Snowflake
 import androidx.compose.material.icons.filled.VolumeDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -61,6 +69,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.accend.app.model.Pillar
+import com.accend.app.model.ProgressionConfig
 import com.accend.app.model.SkillTrack
 import com.accend.app.model.UserProfile
 import com.accend.app.ui.components.AccendAvatar
@@ -69,9 +78,13 @@ import com.accend.app.ui.theme.GoldBorder
 import com.accend.app.ui.theme.GoldHairline
 import com.accend.app.ui.theme.GoldLight
 import com.accend.app.ui.theme.GoldPrimary
+import com.accend.app.ui.theme.MentalCyan
 import com.accend.app.ui.theme.ObsidianBg
 import com.accend.app.ui.theme.ObsidianCard
 import com.accend.app.ui.theme.ObsidianSurface
+import com.accend.app.ui.theme.PhysicalOrange
+import com.accend.app.ui.theme.SkillsViolet
+import com.accend.app.ui.theme.SocialEmerald
 import com.accend.app.ui.theme.SuccessGreen
 import com.accend.app.ui.theme.TextMuted
 import com.accend.app.ui.theme.TextPrimary
@@ -83,11 +96,15 @@ fun SettingsScreen(
     userProfile: UserProfile,
     isSyncing: Boolean,
     syncMessage: String?,
+    completedTaskCount: Int,
     onUpdateProfile: (displayName: String, avatarId: String, skillTrackId: String, customAvatarUri: String?) -> Unit,
     onTogglePause: () -> Unit,
     onTogglePillarMute: (Pillar) -> Unit,
     onUpdateReminders: (morning: Boolean, morningTime: String, evening: Boolean, eveningTime: String) -> Unit,
     onSyncWithCloud: () -> Unit,
+    onUseStreakFreeze: () -> Unit,
+    onClearCache: () -> Unit,
+    onToggleDarkMode: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -123,6 +140,10 @@ fun SettingsScreen(
         "avatar_gold_4", "avatar_gold_5", "avatar_gold_6"
     )
 
+    val completionPct = if (userProfile.currentDay > 1) {
+        ((userProfile.totalDaysCompleted.toFloat() / userProfile.currentDay.toFloat()) * 100f).coerceIn(0f, 100f)
+    } else 0f
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -148,8 +169,10 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // ── Account Section ──
-        SettingsSectionHeader(title = "Account")
+        // ══════════════════════════════════════
+        //  PROFILE
+        // ══════════════════════════════════════
+        SettingsSectionHeader(title = "Profile")
         Surface(
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
             color = ObsidianCard
@@ -195,42 +218,47 @@ fun SettingsScreen(
 
                     Column(modifier = Modifier.weight(1f)) {
                         Text(text = editName, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = TextPrimary)
-                        Text(text = userProfile.email ?: "imthesmith786@gmail.com", fontSize = 12.sp, color = TextSecondary)
+                        Surface(
+                            shape = RoundedCornerShape(6.dp),
+                            color = GoldPrimary.copy(alpha = 0.15f),
+                            border = BorderStroke(0.5.dp, GoldPrimary.copy(alpha = 0.4f))
+                        ) {
+                            Text(
+                                text = userProfile.title,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = GoldLight,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                            )
+                        }
                     }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedButton(
-                    onClick = {
-                        photoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    border = BorderStroke(1.dp, GoldBorder),
-                    colors = ButtonDefaults.outlinedButtonColors(containerColor = ObsidianSurface, contentColor = GoldLight),
-                    modifier = Modifier.fillMaxWidth().testTag("settings_choose_gallery_button")
-                ) {
-                    Icon(imageVector = Icons.Default.PhotoLibrary, contentDescription = "Gallery", tint = GoldPrimary, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = if (customAvatarUri != null) "CHANGE PHOTO FROM GALLERY" else "CHOOSE PHOTO FROM GALLERY",
-                        fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp, color = GoldLight
-                    )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                val progress = ProgressionConfig.calculateProgress(userProfile.totalExp)
+                Text(text = "Level ${progress.currentLevel}  ·  ${progress.totalExp} EXP", fontSize = 12.sp, color = TextSecondary)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Avatar grid
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
                     availableAvatars.forEach { avatarId ->
-                        val isSelected = avatarId == selectedAvatar && customAvatarUri == null
+                        val isSelected = avatarId == selectedAvatar
                         Box(
-                            modifier = Modifier.clickable {
-                                selectedAvatar = avatarId
-                                customAvatarUri = null
-                                onUpdateProfile(editName, avatarId, selectedSkillTrack, null)
-                            }.padding(2.dp)
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .background(ObsidianSurface)
+                                .border(2.dp, if (isSelected) GoldPrimary else Color.Transparent, CircleShape)
+                                .clickable {
+                                    selectedAvatar = avatarId
+                                    onUpdateProfile(editName, avatarId, selectedSkillTrack, customAvatarUri)
+                                }
+                                .padding(2.dp)
                         ) {
                             AccendAvatar(avatarId = avatarId, displayName = editName, size = 30.dp, showRing = isSelected)
                         }
@@ -279,7 +307,85 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // ── Notifications Section ──
+        // ══════════════════════════════════════
+        //  STATISTICS
+        // ══════════════════════════════════════
+        SettingsSectionHeader(title = "Statistics")
+        Surface(
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
+            color = ObsidianCard
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(text = "Day ${userProfile.currentDay}", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                        Text(text = "${completionPct.toInt()}% completed", fontSize = 12.sp, color = TextSecondary)
+                    }
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = ObsidianSurface
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "${userProfile.totalTasksCompleted}", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = GoldPrimary)
+                            Text(text = "Tasks Done", fontSize = 10.sp, color = TextSecondary)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+                HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f))
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Per-pillar stats
+                val pillars = listOf(
+                    Triple("Physical", userProfile.physicalCompleted, PhysicalOrange),
+                    Triple("Mental", userProfile.mentalCompleted, MentalCyan),
+                    Triple("Skills", userProfile.skillsCompleted, SkillsViolet),
+                    Triple("Social", userProfile.socialCompleted, SocialEmerald)
+                )
+                val totalCompleted = (userProfile.physicalCompleted + userProfile.mentalCompleted + userProfile.skillsCompleted + userProfile.socialCompleted).coerceAtLeast(1)
+
+                pillars.forEach { (name, count, color) ->
+                    val pct = (count.toFloat() / totalCompleted.toFloat()).coerceIn(0f, 1f)
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(text = name, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = color, modifier = Modifier.width(70.dp))
+                        LinearProgressIndicator(
+                            progress = { pct },
+                            modifier = Modifier.weight(1f).height(6.dp).clip(RoundedCornerShape(3.dp)),
+                            color = color,
+                            trackColor = color.copy(alpha = 0.15f)
+                        )
+                        Text(text = "$count", fontSize = 12.sp, color = TextSecondary, modifier = Modifier.width(30.dp))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "Best Streak: ${userProfile.bestStreak} days", fontSize = 11.sp, color = TextSecondary)
+                    Text(text = "Best Level: ${userProfile.level}", fontSize = 11.sp, color = TextSecondary)
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        // ══════════════════════════════════════
+        //  NOTIFICATIONS
+        // ══════════════════════════════════════
         SettingsSectionHeader(title = "Notifications")
         Surface(
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
@@ -287,8 +393,8 @@ fun SettingsScreen(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 SettingsToggleRow(
-                    title = "Morning Reminder",
-                    subtitle = "Daily kickoff notification",
+                    title = "Morning Review",
+                    subtitle = userProfile.morningReminderTime,
                     icon = { Icon(imageVector = Icons.Default.Notifications, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
                     checked = morningReminder,
                     onCheckedChange = {
@@ -299,7 +405,7 @@ fun SettingsScreen(
                 HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f), modifier = Modifier.padding(vertical = 4.dp))
                 SettingsToggleRow(
                     title = "Evening Review",
-                    subtitle = "End-of-day reflection",
+                    subtitle = userProfile.eveningReminderTime,
                     icon = { Icon(imageVector = Icons.Default.Notifications, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
                     checked = eveningReminder,
                     onCheckedChange = {
@@ -333,69 +439,54 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // ── Audio Section ──
-        SettingsSectionHeader(title = "Audio")
-        Surface(
-            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
-            color = ObsidianCard
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.VolumeDown, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp))
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
-                        Text(text = "Background Music", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                        Text(text = "Ambient score during session", fontSize = 11.sp, color = TextSecondary)
-                    }
-                }
-                Spacer(modifier = Modifier.height(6.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.VolumeDown, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp))
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
-                        Text(text = "Sound Effects", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                        Text(text = "Task completion chime", fontSize = 11.sp, color = TextSecondary)
-                    }
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        // ── Program Pause ──
+        // ══════════════════════════════════════
+        //  PROGRAM
+        // ══════════════════════════════════════
         SettingsSectionHeader(title = "Program")
         Surface(
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).testTag("program_pause_controls"),
             color = ObsidianCard
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
+                // Streak Freeze
+                SettingsToggleRow(
+                    title = "Streak Freeze",
+                    subtitle = "${userProfile.streakFreezeTokens} tokens remaining",
+                    icon = { Icon(imageVector = Icons.Default.Snowflake, contentDescription = null, tint = Color(0xFF7DD3FC), modifier = Modifier.size(20.dp)) },
+                    checked = false,
+                    onCheckedChange = { onUseStreakFreeze() }
+                )
+                Text(text = "Use a token to preserve your streak for today", fontSize = 10.sp, color = TextMuted, modifier = Modifier.padding(start = 30.dp))
+
+                HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f), modifier = Modifier.padding(vertical = 6.dp))
+
+                // Pause Program
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Pause Program", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                        Text(
-                            text = if (userProfile.isPaused) "Curriculum frozen" else "Active progression",
-                            fontSize = 12.sp, color = if (userProfile.isPaused) Color(0xFFFFC53D) else SuccessGreen
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                        Icon(
+                            imageVector = if (userProfile.isPaused) Icons.Default.PauseCircle else Icons.Default.PlayCircle,
+                            contentDescription = "Pause status",
+                            tint = if (userProfile.isPaused) Color(0xFFFFC53D) else GoldPrimary,
+                            modifier = Modifier.size(20.dp)
                         )
-                        Text(
-                            text = "${userProfile.maxPauseDays - userProfile.pauseDaysUsed} of ${userProfile.maxPauseDays} pause days remaining",
-                            fontSize = 11.sp, color = TextSecondary
-                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Column {
+                            Text(text = "Pause Program", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                            Text(
+                                text = if (userProfile.isPaused) "Curriculum frozen" else "${userProfile.maxPauseDays - userProfile.pauseDaysUsed} pause days left",
+                                fontSize = 11.sp, color = if (userProfile.isPaused) Color(0xFFFFC53D) else TextSecondary
+                            )
+                        }
                     }
-                    Icon(
-                        imageVector = if (userProfile.isPaused) Icons.Default.PauseCircle else Icons.Default.PlayCircle,
-                        contentDescription = "Pause status",
-                        tint = if (userProfile.isPaused) Color(0xFFFFC53D) else GoldPrimary,
-                        modifier = Modifier.size(32.dp)
-                    )
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = onTogglePause,
-                    modifier = Modifier.fillMaxWidth().height(42.dp),
+                    modifier = Modifier.fillMaxWidth().height(40.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (userProfile.isPaused) SuccessGreen else GoldPrimary,
@@ -404,7 +495,47 @@ fun SettingsScreen(
                 ) {
                     Text(
                         text = if (userProfile.isPaused) "RESUME PROGRAM" else "PAUSE PROGRAM",
-                        fontWeight = FontWeight.Bold, fontSize = 12.sp, letterSpacing = 1.sp
+                        fontWeight = FontWeight.Bold, fontSize = 11.sp, letterSpacing = 1.sp
+                    )
+                }
+
+                HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f), modifier = Modifier.padding(vertical = 6.dp))
+
+                // Clear Cache
+                SettingsRow(
+                    title = "Clear Cache",
+                    subtitle = "Free up local storage",
+                    icon = { Icon(imageVector = Icons.Default.DeleteSweep, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
+                    onClick = onClearCache
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        // ══════════════════════════════════════
+        //  APPEARANCE
+        // ══════════════════════════════════════
+        SettingsSectionHeader(title = "Appearance")
+        Surface(
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
+            color = ObsidianCard
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(imageVector = Icons.Default.FlashOn, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(text = "Dark Mode", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                    }
+                    Switch(
+                        checked = userProfile.isDarkMode,
+                        onCheckedChange = { onToggleDarkMode() },
+                        colors = SwitchDefaults.colors(checkedThumbColor = GoldPrimary, checkedTrackColor = GoldPrimary.copy(alpha = 0.4f))
                     )
                 }
             }
@@ -412,7 +543,48 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // ── Cloud Sync Section ──
+        // ══════════════════════════════════════
+        //  PRIVACY
+        // ══════════════════════════════════════
+        SettingsSectionHeader(title = "Privacy")
+        Surface(
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
+            color = ObsidianCard
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(imageVector = Icons.Default.Shield, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = "Privacy Level", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                        Text(text = "Control who can see your leaderboard profile", fontSize = 11.sp, color = TextSecondary)
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                listOf("everyone" to "Everyone", "friends_only" to "Friends Only", "private" to "Private").forEach { (level, label) ->
+                    val isSelected = userProfile.privacyLevel == level
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(if (isSelected) ObsidianSurface else Color.Transparent)
+                            .border(1.dp, if (isSelected) GoldPrimary else Color.Transparent, RoundedCornerShape(8.dp))
+                            .clickable { /* Would call onUpdatePrivacy */ }
+                            .padding(horizontal = 10.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = label, fontSize = 13.sp, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, color = if (isSelected) GoldLight else TextPrimary)
+                        if (isSelected) Icon(imageVector = Icons.Default.Check, contentDescription = "Selected", tint = GoldPrimary, modifier = Modifier.size(16.dp))
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        // ══════════════════════════════════════
+        //  CLOUD SYNC
+        // ══════════════════════════════════════
         SettingsSectionHeader(title = "Cloud Sync")
         Surface(
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
@@ -437,7 +609,7 @@ fun SettingsScreen(
 
                 Button(
                     onClick = onSyncWithCloud,
-                    modifier = Modifier.fillMaxWidth().height(46.dp).testTag("sync_cloud_button"),
+                    modifier = Modifier.fillMaxWidth().height(42.dp).testTag("sync_cloud_button"),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = GoldPrimary, contentColor = ObsidianBg)
                 ) {
@@ -449,7 +621,7 @@ fun SettingsScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = if (isSyncing) "SYNCHRONIZING..." else "MANUAL CLOUD SYNC",
-                            fontWeight = FontWeight.Bold, fontSize = 12.sp, letterSpacing = 1.sp
+                            fontWeight = FontWeight.Bold, fontSize = 11.sp, letterSpacing = 1.sp
                         )
                     }
                 }
@@ -464,7 +636,7 @@ fun SettingsScreen(
             color = ObsidianSurface
         ) {
             Column(modifier = Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "ACCEND v1.5.0", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = TextMuted)
+                Text(text = "ACCEND v2.0.0", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = TextMuted)
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(text = "Character Progression for Real Life", fontSize = 10.sp, color = TextSecondary)
             }
@@ -512,5 +684,31 @@ private fun SettingsToggleRow(
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(checkedThumbColor = GoldPrimary, checkedTrackColor = GoldPrimary.copy(alpha = 0.4f))
         )
+    }
+}
+
+@Composable
+private fun SettingsRow(
+    title: String,
+    subtitle: String,
+    icon: @Composable () -> Unit,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+            icon()
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Text(text = title, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                Text(text = subtitle, fontSize = 11.sp, color = TextSecondary)
+            }
+        }
+        Icon(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = TextMuted, modifier = Modifier.size(20.dp))
     }
 }

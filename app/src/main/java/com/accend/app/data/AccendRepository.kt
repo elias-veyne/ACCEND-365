@@ -70,7 +70,20 @@ class AccendRepository(
             skillsMuted = entity.skillsMuted,
             socialMuted = entity.socialMuted,
             lastSyncedAt = entity.lastSyncedAt,
-            email = entity.email
+            email = entity.email,
+            streakFreezeTokens = entity.streakFreezeTokens,
+            restDaysUsedThisWeek = entity.restDaysUsedThisWeek,
+            weeklyReflection = entity.weeklyReflection,
+            dailyGoalsPillarIds = entity.dailyGoalsPillarIds.split(",").filter { it.isNotBlank() },
+            isDarkMode = entity.isDarkMode,
+            privacyLevel = entity.privacyLevel,
+            totalDaysCompleted = entity.totalDaysCompleted,
+            totalTasksCompleted = entity.totalTasksCompleted,
+            bestStreak = entity.bestStreak,
+            physicalCompleted = entity.physicalCompleted,
+            mentalCompleted = entity.mentalCompleted,
+            skillsCompleted = entity.skillsCompleted,
+            socialCompleted = entity.socialCompleted
         )
     }
 
@@ -98,7 +111,20 @@ class AccendRepository(
             skillsMuted = profile.skillsMuted,
             socialMuted = profile.socialMuted,
             lastSyncedAt = System.currentTimeMillis(),
-            email = profile.email
+            email = profile.email,
+            streakFreezeTokens = profile.streakFreezeTokens,
+            restDaysUsedThisWeek = profile.restDaysUsedThisWeek,
+            weeklyReflection = profile.weeklyReflection,
+            dailyGoalsPillarIds = profile.dailyGoalsPillarIds.joinToString(","),
+            isDarkMode = profile.isDarkMode,
+            privacyLevel = profile.privacyLevel,
+            totalDaysCompleted = profile.totalDaysCompleted,
+            totalTasksCompleted = profile.totalTasksCompleted,
+            bestStreak = profile.bestStreak,
+            physicalCompleted = profile.physicalCompleted,
+            mentalCompleted = profile.mentalCompleted,
+            skillsCompleted = profile.skillsCompleted,
+            socialCompleted = profile.socialCompleted
         )
         dao.insertOrUpdateProfile(entity)
         try {
@@ -165,11 +191,17 @@ class AccendRepository(
         )
         dao.insertOrUpdateProgress(progressEntity)
 
-        // Update profile
+        // Update completion stats
+        val pillarId = task.pillar.id
         val updatedProfile = currentProfile.copy(
             totalExp = updatedTotalExp,
             level = newProgressCalc.currentLevel,
-            title = newProgressCalc.title
+            title = newProgressCalc.title,
+            totalTasksCompleted = if (willBeCompleted) currentProfile.totalTasksCompleted + 1 else (currentProfile.totalTasksCompleted - 1).coerceAtLeast(0),
+            physicalCompleted = if (willBeCompleted && pillarId == "physical") currentProfile.physicalCompleted + 1 else currentProfile.physicalCompleted,
+            mentalCompleted = if (willBeCompleted && pillarId == "mental") currentProfile.mentalCompleted + 1 else currentProfile.mentalCompleted,
+            skillsCompleted = if (willBeCompleted && pillarId == "skills") currentProfile.skillsCompleted + 1 else currentProfile.skillsCompleted,
+            socialCompleted = if (willBeCompleted && pillarId == "social") currentProfile.socialCompleted + 1 else currentProfile.socialCompleted
         )
         saveProfile(updatedProfile)
 
