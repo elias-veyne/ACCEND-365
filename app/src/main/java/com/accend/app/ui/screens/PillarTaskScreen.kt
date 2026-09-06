@@ -52,6 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.accend.app.audio.SoundManager
 import com.accend.app.model.Pillar
 import com.accend.app.model.TaskItem
 import com.accend.app.ui.theme.AccendSerif
@@ -286,6 +287,7 @@ private fun TaskItemCard(
                 Box(
                     modifier = Modifier
                         .bouncyClickable(pressedScale = 0.88f) {
+                            if (!task.isCompleted) SoundManager.playClick()
                             onToggle(if (notesText.isNotBlank()) notesText else null)
                         }
                         .size(32.dp)

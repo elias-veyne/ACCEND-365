@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.accend.app.audio.SoundManager
 import com.accend.app.ui.theme.AccendSerif
 import com.accend.app.ui.theme.GoldDark
 import com.accend.app.ui.theme.GoldLight
@@ -162,7 +161,6 @@ fun LevelUpCelebrationDialog(
 
                 Button(
                     onClick = {
-                        SoundManager.playClick()
                         onDismiss()
                     },
                     modifier = Modifier

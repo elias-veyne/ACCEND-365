@@ -58,7 +58,6 @@ import com.accend.app.ui.theme.ObsidianSurface
 import com.accend.app.ui.theme.TextMuted
 import com.accend.app.ui.theme.TextPrimary
 import com.accend.app.ui.theme.TextSecondary
-import com.accend.app.audio.SoundManager
 
 @Composable
 fun HomeScreen(
@@ -104,7 +103,6 @@ fun HomeScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    SoundManager.playClick()
                     onAvatarClick()
                 }
             ) {
