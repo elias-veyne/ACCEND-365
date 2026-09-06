@@ -314,7 +314,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Pillar.entries.forEach { pillar ->
-                    val isMuted = userProfile.mutedPillars.contains(pillar.id)
+                    val isMuted = when (pillar.id) { "physical" -> userProfile.physicalMuted; "mental" -> userProfile.mentalMuted; "skills" -> userProfile.skillsMuted; "social" -> userProfile.socialMuted; else -> false }
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
