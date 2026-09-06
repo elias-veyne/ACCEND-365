@@ -58,6 +58,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.accend.app.model.SkillTrack
+import com.accend.app.audio.SoundManager
 import com.accend.app.ui.components.AccendAvatar
 import com.accend.app.ui.theme.AccendSerif
 import com.accend.app.ui.theme.GoldBorder
@@ -206,6 +207,7 @@ fun IdentitySetupScreen(
                         .background(GoldPrimary)
                         .border(2.dp, ObsidianBg, CircleShape)
                         .clickable {
+                            SoundManager.playClick()
                             photoPickerLauncher.launch(
                                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                             )
@@ -227,6 +229,7 @@ fun IdentitySetupScreen(
             // Prominent Choose from Gallery Button
             OutlinedButton(
                 onClick = {
+                    SoundManager.playClick()
                     photoPickerLauncher.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                     )
@@ -276,6 +279,7 @@ fun IdentitySetupScreen(
                     Box(
                         modifier = Modifier
                             .clickable {
+                                SoundManager.playClick()
                                 selectedAvatarId = avatarId
                                 customAvatarUri = null
                             }
@@ -356,7 +360,10 @@ fun IdentitySetupScreen(
                                 color = if (isSelected) GoldPrimary else GoldHairline,
                                 shape = RoundedCornerShape(12.dp)
                             )
-                            .clickable { selectedSkillTrackId = track.id }
+                            .clickable {
+                                SoundManager.playClick()
+                                selectedSkillTrackId = track.id
+                            }
                             .testTag("skill_track_${track.id}"),
                         color = if (isSelected) ObsidianSurface else ObsidianCard
                     ) {
@@ -425,6 +432,7 @@ fun IdentitySetupScreen(
             // Primary Action Button (disabled until name is entered)
             Button(
                 onClick = {
+                    SoundManager.playClick()
                     if (isFormValid && !isSubmitting) {
                         isSubmitting = true
                         onComplete(displayName, selectedAvatarId, selectedSkillTrackId, customAvatarUri)

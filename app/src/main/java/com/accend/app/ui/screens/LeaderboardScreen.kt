@@ -55,6 +55,7 @@ import com.accend.app.model.LeaderboardUser
 import com.accend.app.ui.components.AccendAvatar
 import com.accend.app.ui.components.bouncyClickable
 import com.accend.app.ui.components.pressScale
+import com.accend.app.audio.SoundManager
 import com.accend.app.ui.theme.AccendSerif
 import com.accend.app.ui.theme.GoldDark
 import com.accend.app.ui.theme.GoldHairline
@@ -209,7 +210,10 @@ fun LeaderboardScreen(
         ) {
             Tab(
                 selected = selectedTab == LeaderboardFilterTab.ALL_TIME,
-                onClick = { onTabSelected(LeaderboardFilterTab.ALL_TIME) },
+                onClick = {
+                    SoundManager.playClick()
+                    onTabSelected(LeaderboardFilterTab.ALL_TIME)
+                },
                 text = {
                     Text(
                         text = "ALL-TIME",
@@ -221,7 +225,10 @@ fun LeaderboardScreen(
             )
             Tab(
                 selected = selectedTab == LeaderboardFilterTab.WEEKLY,
-                onClick = { onTabSelected(LeaderboardFilterTab.WEEKLY) },
+                onClick = {
+                    SoundManager.playClick()
+                    onTabSelected(LeaderboardFilterTab.WEEKLY)
+                },
                 text = {
                     Text(
                         text = "WEEKLY",
@@ -319,7 +326,10 @@ fun LeaderboardScreen(
 
                     val syncInteractionSource = remember { MutableInteractionSource() }
                     Button(
-                        onClick = { onRefresh() },
+                        onClick = {
+                            SoundManager.playClick()
+                            onRefresh()
+                        },
                         interactionSource = syncInteractionSource,
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(

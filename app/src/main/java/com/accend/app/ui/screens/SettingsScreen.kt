@@ -79,6 +79,7 @@ import com.accend.app.ui.theme.SuccessGreen
 import com.accend.app.ui.theme.TextMuted
 import com.accend.app.ui.theme.TextPrimary
 import com.accend.app.ui.theme.TextSecondary
+import com.accend.app.audio.SoundManager
 import java.io.File
 
 @Composable
@@ -207,6 +208,7 @@ fun SettingsScreen(
                                 .background(GoldPrimary)
                                 .border(1.5.dp, ObsidianBg, CircleShape)
                                 .clickable {
+                                    SoundManager.playClick()
                                     photoPickerLauncher.launch(
                                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                                     )
@@ -248,6 +250,7 @@ fun SettingsScreen(
 
                 OutlinedButton(
                     onClick = {
+                        SoundManager.playClick()
                         photoPickerLauncher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
@@ -288,6 +291,7 @@ fun SettingsScreen(
                         Box(
                             modifier = Modifier
                                 .clickable {
+                                    SoundManager.playClick()
                                     selectedAvatar = avatarId
                                     customAvatarUri = null
                                     onUpdateProfile(editName, avatarId, selectedSkillTrack, null)
@@ -347,6 +351,7 @@ fun SettingsScreen(
                             .background(if (isSelected) ObsidianSurface else Color.Transparent)
                             .border(1.dp, if (isSelected) GoldPrimary else Color.Transparent, RoundedCornerShape(8.dp))
                             .clickable {
+                                SoundManager.playClick()
                                 selectedSkillTrack = track.id
                                 onUpdateProfile(editName, selectedAvatar, track.id, customAvatarUri)
                             }
@@ -426,7 +431,10 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Button(
-                    onClick = onTogglePause,
+                    onClick = {
+                        SoundManager.playClick()
+                        onTogglePause()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(44.dp)
@@ -566,6 +574,7 @@ fun SettingsScreen(
                     Switch(
                         checked = userProfile.morningReminderEnabled,
                         onCheckedChange = {
+                            SoundManager.playClick()
                             onUpdateReminders(it, userProfile.morningReminderTime, userProfile.eveningReminderEnabled, userProfile.eveningReminderTime)
                         },
                         colors = SwitchDefaults.colors(checkedThumbColor = GoldPrimary, checkedTrackColor = GoldDark)
@@ -587,6 +596,7 @@ fun SettingsScreen(
                     Switch(
                         checked = userProfile.eveningReminderEnabled,
                         onCheckedChange = {
+                            SoundManager.playClick()
                             onUpdateReminders(userProfile.morningReminderEnabled, userProfile.morningReminderTime, it, userProfile.eveningReminderTime)
                         },
                         colors = SwitchDefaults.colors(checkedThumbColor = GoldPrimary, checkedTrackColor = GoldDark)
@@ -622,7 +632,10 @@ fun SettingsScreen(
                         Text(text = "${pillar.title} Alerts", fontSize = 13.sp, color = TextPrimary)
                         Switch(
                             checked = !isMuted,
-                            onCheckedChange = { onTogglePillarMute(pillar) },
+                            onCheckedChange = {
+                                SoundManager.playClick()
+                                onTogglePillarMute(pillar)
+                            },
                             colors = SwitchDefaults.colors(checkedThumbColor = pillar.themeColor, checkedTrackColor = pillar.themeColor.copy(alpha = 0.4f))
                         )
                     }
@@ -687,7 +700,10 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Button(
-                    onClick = onSyncWithCloud,
+                    onClick = {
+                        SoundManager.playClick()
+                        onSyncWithCloud()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(46.dp)
@@ -730,7 +746,7 @@ fun SettingsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "ACCEND v1.0.0 • Production Build",
+                    text = "ACCEND v1.4.0 • Production Build",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextMuted

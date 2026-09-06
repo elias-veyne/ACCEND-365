@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.accend.app.audio.SoundManager
 import com.accend.app.model.Pillar
 import com.accend.app.ui.components.AccendBottomBar
 import com.accend.app.ui.components.LevelUpCelebrationDialog
@@ -47,6 +49,11 @@ fun AccendApp(
     modifier: Modifier = Modifier
 ) {
     var showSplash by remember { mutableStateOf(true) }
+
+    // Kick off the looping background music once the cinematic splash hands over
+    LaunchedEffect(showSplash) {
+        if (!showSplash) SoundManager.startBgm()
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         AccendAppContent(viewModelFactory = viewModelFactory)
@@ -83,6 +90,11 @@ private fun AccendAppContent(
     val syncMessage by viewModel.syncMessage.collectAsState()
     val leaderboardFilterTab by viewModel.leaderboardFilterTab.collectAsState()
     val filterFriendsOnly by viewModel.filterFriendsOnly.collectAsState()
+
+    // In-app notification chime whenever a level-up / title unlock fires
+    LaunchedEffect(celebrationEvent) {
+        celebrationEvent?.let { SoundManager.playNotification() }
+    }
 
     val leaderboardUsers = viewModel.getLeaderboard(leaderboardFilterTab, filterFriendsOnly)
 

@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.accend.app.audio.SoundManager
 import com.accend.app.ui.theme.GoldDark
 import com.accend.app.ui.theme.GoldHairline
 import com.accend.app.ui.theme.GoldLight
@@ -116,7 +117,10 @@ private fun BottomNavItem(
         modifier = Modifier
             .size(width = 72.dp, height = 52.dp)
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onClick() }
+            .clickable {
+                SoundManager.playClick()
+                onClick()
+            }
             .testTag(testTag),
         contentAlignment = Alignment.Center
     ) {

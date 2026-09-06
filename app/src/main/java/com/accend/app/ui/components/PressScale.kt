@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
+import com.accend.app.audio.SoundManager
 
 /**
  * Buttery press feedback: the target shrinks with a bouncy spring while held
@@ -52,6 +53,7 @@ fun Modifier.bouncyClickable(
             onClickLabel = onClickLabel,
             role = role
         ) {
+            SoundManager.playClick()
             onClick()
         }
 }

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.accend.app.audio.SoundManager
 import kotlinx.coroutines.delay
 import kotlin.math.pow
 import kotlin.math.sin
@@ -94,6 +96,12 @@ fun CinematicSplashScreen(
             timeSeconds = ((System.nanoTime() - start) / 1_000_000_000f)
             delay(16L)
         }
+    }
+
+    // Loading-screen audio plays for the whole cinematic intro
+    DisposableEffect(Unit) {
+        SoundManager.playLoading()
+        onDispose { SoundManager.stopLoading() }
     }
 
     val t = (timeSeconds / 5f).coerceIn(0f, 1f)
@@ -160,7 +168,10 @@ fun CinematicSplashScreen(
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
-            ) { onDismiss() },
+            ) {
+                SoundManager.playClick()
+                onDismiss()
+            },
     ) {
         // Floating gold particles
         Canvas(Modifier.fillMaxSize()) {
@@ -281,7 +292,10 @@ fun CinematicSplashScreen(
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
-                        ) { onDismiss() }
+                        ) {
+                            SoundManager.playClick()
+                            onDismiss()
+                        }
                         .width(120.dp)
                         .height(40.dp),
                     contentAlignment = Alignment.Center,

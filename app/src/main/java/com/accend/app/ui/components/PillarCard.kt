@@ -43,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.accend.app.audio.SoundManager
 import com.accend.app.model.Pillar
 import com.accend.app.ui.theme.GoldHairline
 import com.accend.app.ui.theme.GoldLight
@@ -92,7 +93,10 @@ fun PillarCard(
             .clickable(
                 interactionSource = interactionSource,
                 indication = ripple(color = GoldPrimary.copy(alpha = 0.3f))
-            ) { onClick() }
+            ) {
+                SoundManager.playClick()
+                onClick()
+            }
             .testTag("pillar_card_${pillar.id}"),
         color = ObsidianCard
     ) {

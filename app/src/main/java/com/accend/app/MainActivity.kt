@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
+import com.accend.app.audio.SoundManager
 import com.accend.app.data.AccendRepository
 import com.accend.app.data.AppDatabase
 import com.accend.app.data.FirebaseSyncManager
@@ -24,6 +25,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Boot the audio hub (click sfx, loading effect, looping bg music)
+        SoundManager.init(applicationContext)
+
         // Initialize local persistence & cloud sync infrastructure
         database = AppDatabase.getInstance(applicationContext)
         firebaseSyncManager = FirebaseSyncManager(applicationContext)
@@ -40,5 +44,20 @@ class MainActivity : ComponentActivity() {
                 AccendApp(viewModelFactory = viewModelFactory)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        SoundManager.resumeBgm()
+    }
+
+    override fun onPause() {
+        SoundManager.pauseBgm()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        SoundManager.release()
+        super.onDestroy()
     }
 }
