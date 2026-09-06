@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.accend.app.audio.SoundManager
 import kotlinx.coroutines.delay
 import kotlin.math.pow
 import kotlin.math.sin
