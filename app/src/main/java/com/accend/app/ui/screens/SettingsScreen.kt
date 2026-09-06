@@ -40,7 +40,7 @@ import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material.icons.filled.Snowflake
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.VolumeDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -452,7 +452,7 @@ fun SettingsScreen(
                 SettingsToggleRow(
                     title = "Streak Freeze",
                     subtitle = "${userProfile.streakFreezeTokens} tokens remaining",
-                    icon = { Icon(imageVector = Icons.Default.Snowflake, contentDescription = null, tint = Color(0xFF7DD3FC), modifier = Modifier.size(20.dp)) },
+                    icon = { Icon(imageVector = Icons.Default.Star, contentDescription = null, tint = Color(0xFF7DD3FC), modifier = Modifier.size(20.dp)) },
                     checked = false,
                     onCheckedChange = { onUseStreakFreeze() }
                 )
