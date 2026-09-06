@@ -20,7 +20,7 @@ import java.util.ArrayDeque
  */
 object SoundManager {
 
-    private const val BGM_VOLUME = 0.18f
+    private const val BGM_VOLUME = 0.07f
     private const val SFX_VOLUME = 0.9f
 
     private var soundPool: SoundPool? = null

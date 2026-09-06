@@ -1,33 +1,112 @@
-# ACCEND-365
+<div align="center">
 
-A 365-day sovereign self-mastery protocol app: Physical, Mental, Skills and Social pillars, one day at a time.
+<img src="docs/developer_avatar.jpg" alt="ACCEND" width="110" style="border-radius:50%;box-shadow:0 0 20px rgba(212,175,55,0.4)"/>
+
+# **ACCEND-365**
+
+### *A 365-Day Sovereign Self-Mastery Protocol*
+
+---
+
+**Transform who you are, one disciplined day at a time.**
+
+ACCEND is not another habit tracker. It is a full character-progression system
+built on four pillars of real life — Physical, Mental, Skills, and Social.
+Every completed task earns real XP, unlocks titles, and advances your rank
+on a live global leaderboard.
+
+[![Release](https://github.com/elias-veyne/ACCEND-365/actions/workflows/release.yml/badge.svg)](https://github.com/elias-veyne/ACCEND-365/releases)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Android%208.0+-brightgreen.svg)](https://github.com/elias-veyne/ACCEND-365/releases)
+
+</div>
+
+---
+
+## What Makes It Different
+
+|  |  |
+|--|--|
+| **Real Cloud Data** | Profiles, XP, and completions sync to Firebase Firestore. Compete against actual users, not bots. |
+| **Four Pillars** | Physical, Mental, Skills, and Social — every dimension of growth tracked independently. |
+| **Cinematic Loading** | A golden particle-splash screen with ambient audio on every launch. |
+| **Live Leaderboard** | See your standing across the entire ACCEND cohort, filterable by All-Time and Friends. |
+| **Daily Quotations** | A fresh stoic quote every day to set the right tone before you begin. |
+| **Progression Ring** | A visual arc on your dashboard showing how far you have come today. |
+
+---
 
 ## Features
 
-- **Cinematic golden splash** on launch (floating gold particles, ACCEND reveal, progress line)
-- **365-day protocol** with per-pillar daily tasks, EXP, levels and unlockable titles
-- **Home dashboard** — daily tasks, progression ring, daily quote, four pillar cards
-- **Analysis** — heatmap + completion stats
-- **Leaderboard** — live cloud cohort standings (All-Time / Friends filter), no fake bots
-- **Cloud sync** — real user profiles, XP and task completions sync to the ACCEND Cloud, restorable on a fresh install
-- **On-device reminders** and pause controls
+- **365-Day Protocol** with per-pillar daily tasks, EXP, levels and unlockable titles
+- **Home Dashboard** — daily tasks, progression ring, daily quote, four pillar cards
+- **Task Completion Rewards** — XP animation, sound effect, level-up celebrations
+- **Analysis** — heatmap and per-pillar completion statistics
+- **Leaderboard** — live cloud cohort standings with All-Time and Friends filters
+- **Cloud Sync** — real user profiles synced to ACCEND Cloud, restorable on fresh install
+- **Ambient Audio** — background music loop, notification sounds, loading-screen audio
+- **Settings** — notification preferences, pillar muting, cloud sync controls
+- **On-Device Reminders** with morning and evening toggle support
 
-## Stack
+---
 
-- Kotlin + Jetpack Compose (Material 3), Room for offline-first local DB
-- Cloud transport: Firebase Firestore (real user profiles, XP and completions)
-- Signed release APK built via GitHub Actions
+## Tech Stack
 
-## Build
+- **Language** — Kotlin
+- **UI** — Jetpack Compose with Material 3
+- **Database** — Room (offline-first local storage)
+- **Backend** — Firebase Firestore (real-time user data and leaderboard)
+- **Auth** — Firebase Anonymous Auth
+- **Media** — MediaPlayer + SoundPool (ambient music, SFX)
+- **Build** — GitHub Actions with signed release APK
 
-Local build requires Android SDK 35 + JDK 17:
+---
+
+## Getting Started
+
+Clone the repo and build locally (requires Android SDK 35 + JDK 17):
 
 ```bash
-./gradlew assembleRelease
+git clone https://github.com/elias-veyne/ACCEND-365.git
+cd ACCEND-365
+./gradlew assembleDebug
 ```
 
-Release builds are also produced automatically on GitHub Actions (workflow `release.yml`) with the signing keystore injected from repo secrets.
+Or grab the latest signed APK from [Releases](https://github.com/elias-veyne/ACCEND-365/releases).
 
-## Releases
+---
 
-Signed APKs are published as GitHub Releases: https://github.com/elias-veyne/ACCEND-365/releases
+## Built With
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin"/>
+  <img src="https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Compose"/>
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase"/>
+  <img src="https://img.shields.io/badge/Room-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Room"/>
+  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="Actions"/>
+</p>
+
+---
+
+## Acknowledgements
+
+The idea behind ACCEND belongs to the community. Special credit goes to the
+developer whose vision made this project possible:
+
+<div align="center">
+
+<img src="docs/developer_avatar.jpg" alt="Developer" width="80" style="border-radius:50%"/>
+
+**[@xoze7.8.9](https://www.instagram.com/xoze7.8.9?stkn=c2I2NnI2NXJjM3Vn)**
+
+*Concept and original idea*
+
+</div>
+
+---
+
+<div align="center">
+
+**One day. One task. One level. Repeat for 365.**
+
+</div>
