@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/developer_avatar.jpg" alt="ACCEND" width="120" style="border-radius:50%;box-shadow:0 0 30px rgba(212,175,55,0.5)"/>
+<img src="docs/app_icon.jpg" alt="ACCEND App Icon" width="132" style="border-radius:24%;box-shadow:0 0 40px rgba(212,175,55,0.55)"/>
 
 # **ACCEND-365**
 

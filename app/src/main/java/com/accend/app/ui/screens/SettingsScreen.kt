@@ -514,69 +514,53 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         // ══════════════════════════════════════
-        //  APPEARANCE
+        //  ACCOUNT SETTINGS
         // ══════════════════════════════════════
-        SettingsSectionHeader(title = "Appearance")
+        SettingsSectionHeader(title = "Account Settings")
         Surface(
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
             color = ObsidianCard
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(imageVector = Icons.Default.FlashOn, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp))
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(text = "Dark Mode", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    }
-                    Switch(
-                        checked = userProfile.isDarkMode,
-                        onCheckedChange = { onToggleDarkMode() },
-                        colors = SwitchDefaults.colors(checkedThumbColor = GoldPrimary, checkedTrackColor = GoldPrimary.copy(alpha = 0.4f))
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        // ══════════════════════════════════════
-        //  PRIVACY
-        // ══════════════════════════════════════
-        SettingsSectionHeader(title = "Privacy")
-        Surface(
-            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
-            color = ObsidianCard
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.Shield, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp))
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Privacy Level", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                        Text(text = "Control who can see your leaderboard profile", fontSize = 11.sp, color = TextSecondary)
-                    }
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                listOf("everyone" to "Everyone", "friends_only" to "Friends Only", "private" to "Private").forEach { (level, label) ->
-                    val isSelected = userProfile.privacyLevel == level
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(if (isSelected) ObsidianSurface else Color.Transparent)
-                            .border(1.dp, if (isSelected) GoldPrimary else Color.Transparent, RoundedCornerShape(8.dp))
-                            .clickable { /* Would call onUpdatePrivacy */ }
-                            .padding(horizontal = 10.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = label, fontSize = 13.sp, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, color = if (isSelected) GoldLight else TextPrimary)
-                        if (isSelected) Icon(imageVector = Icons.Default.Check, contentDescription = "Selected", tint = GoldPrimary, modifier = Modifier.size(16.dp))
-                    }
-                }
+                SettingsRow(
+                    title = "Edit Profile",
+                    subtitle = "Name, avatar & skill track",
+                    icon = { Icon(imageVector = Icons.Default.Person, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
+                    onClick = { /* scroll to profile section */ }
+                )
+                HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f), modifier = Modifier.padding(vertical = 4.dp))
+                SettingsRow(
+                    title = "Privacy Settings",
+                    subtitle = when (userProfile.privacyLevel) {
+                        "everyone" -> "Everyone"
+                        "friends_only" -> "Friends Only"
+                        "private" -> "Private"
+                        else -> "Friends Only"
+                    },
+                    icon = { Icon(imageVector = Icons.Default.Shield, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
+                    onClick = { /* toggle privacy */ }
+                )
+                HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f), modifier = Modifier.padding(vertical = 4.dp))
+                SettingsRow(
+                    title = "Connected Accounts",
+                    subtitle = "Manage linked services",
+                    icon = { Icon(imageVector = Icons.Default.Security, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
+                    onClick = { /* connected accounts */ }
+                )
+                HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f), modifier = Modifier.padding(vertical = 4.dp))
+                SettingsRow(
+                    title = "Data & Privacy",
+                    subtitle = "Export, backup & privacy controls",
+                    icon = { Icon(imageVector = Icons.Default.PrivacyTip, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
+                    onClick = { /* data & privacy */ }
+                )
+                HorizontalDivider(color = GoldHairline.copy(alpha = 0.3f), modifier = Modifier.padding(vertical = 4.dp))
+                SettingsRow(
+                    title = "Dark Mode",
+                    subtitle = if (userProfile.isDarkMode) "Enabled" else "Disabled",
+                    icon = { Icon(imageVector = Icons.Default.FlashOn, contentDescription = null, tint = GoldPrimary, modifier = Modifier.size(20.dp)) },
+                    onClick = { onToggleDarkMode() }
+                )
             }
         }
 
