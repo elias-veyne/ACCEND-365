@@ -15,7 +15,7 @@ A 365-day sovereign self-mastery protocol app: Physical, Mental, Skills and Soci
 ## Stack
 
 - Kotlin + Jetpack Compose (Material 3), Room for offline-first local DB
-- Cloud transport: CrudCrud free REST API (no account needed; HTTPS + CORS)
+- Cloud transport: Firebase Firestore (real user profiles, XP and completions)
 - Signed release APK built via GitHub Actions
 
 ## Build

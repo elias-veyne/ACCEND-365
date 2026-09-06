@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "46573094065",
+    "project_id": "accend-5c0f1",
+    "storage_bucket": "accend-5c0f1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46573094065:android:fe449aca6c32d72a124e90",
+        "android_client_info": {
+          "package_name": "com.accend.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzeXIMwyXTNPWhiOoT6A0vFO5vP9YouN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46573094065:android:1a490e65a187d88e124e90",
+        "android_client_info": {
+          "package_name": "com.android.accend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzeXIMwyXTNPWhiOoT6A0vFO5vP9YouN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
